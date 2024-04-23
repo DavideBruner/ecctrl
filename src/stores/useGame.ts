@@ -47,6 +47,14 @@ export const useGame = /* @__PURE__ */ create(
             state.curAnimation !== state.animationSet.action3 &&
             state.curAnimation !== state.animationSet.action4
           ) {
+            if (
+              state.animationSet?.custom &&
+              Object.values(state.animationSet?.custom).includes(
+                state.curAnimation
+              )
+            ) {
+              return {};
+            }
             return { curAnimation: state.animationSet.idle };
           }
           return {};
@@ -146,10 +154,13 @@ export const useGame = /* @__PURE__ */ create(
        */
       setCustomAnimation: (animation: string) => {
         set((state) => {
-          if (state.animationSet.custom[animation]) {
+          if (
+            state.animationSet.custom[animation] &&
+            state.curAnimation === state.animationSet.idle
+          ) {
             return { curAnimation: state.animationSet.custom[animation] };
           }
-          return {};
+          return { curAnimation: state.animationSet.idle };
         });
       },
 
